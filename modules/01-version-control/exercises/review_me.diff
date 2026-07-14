@@ -1,0 +1,40 @@
+# Pull request: "quick fixes for the dashboard + cleanup"
+# Author: a well-meaning teammate. Your job: review it.
+# (Annotated unified diff — hunk numbers added for the exercise.)
+
+--- HUNK 1 -------------------------------------------------------------
+--- a/pipeline.py
++++ b/pipeline.py
+@@
+-# marketing wants revenue incl. VAT
+-rev = qty * price * 1.17
++# marketing wants revenue incl. VAT
++rev = round(qty * price * 1.17)
+
+--- HUNK 2 -------------------------------------------------------------
+--- a/config.py
++++ b/config.py
+@@
+-WAREHOUSE_PATH = "data/warehouse.duckdb"
++WAREHOUSE_PATH = "data/warehouse.duckdb"
++SNOWFLAKE_PASSWORD = "Corr3ctHorse!Battery"  # temp, will move to env later
+
+--- HUNK 3 -------------------------------------------------------------
+--- a/pipeline.py
++++ b/pipeline.py
+@@
+-for fname in sorted(glob.glob("data/raw/sales/*.csv")):
++for fname in sorted(glob.glob("data/raw/sales/*.csv")):  # noqa: process files in order
+     rows = []
+
+--- HUNK 4 -------------------------------------------------------------
+--- a/queries/top_products.sql
++++ b/queries/top_products.sql
+@@
+-SELECT p.product_name, SUM(s.quantity) AS units
+-FROM sales s JOIN products p ON s.product_id = p.product_id
+-GROUP BY 1 ORDER BY units DESC
++SELECT p.product_name, SUM(s.quantity) AS units
++FROM sales s JOIN products p ON s.product_id = p.product_id
++WHERE s.payment_method != 'cash'
++GROUP BY 1 ORDER BY units DESC

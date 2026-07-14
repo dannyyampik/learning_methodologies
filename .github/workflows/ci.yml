@@ -1,0 +1,39 @@
+# The course repo's real CI — and Module 06's case study. Every line here is
+# discussed in modules/06-ci-cd/README.md.
+#
+# Shape: two jobs, cheap-first. Lint fails in seconds; the full test suite
+# (which runs every module's reference solutions and project snapshots)
+# only spends minutes when the cheap gate has already passed.
+
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install course tooling
+        run: pip install -e ".[dev]"
+      - name: Lint and check formatting
+        run: make lint
+
+  test:
+    needs: lint # fail fast: don't spend test minutes on unformatted code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install course tooling
+        run: pip install -e ".[dev]"
+      - name: Run every module's tests against the reference solutions
+        run: make test

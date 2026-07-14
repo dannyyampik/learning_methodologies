@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "learning-methodologies"
+version = "1.0.0"
+description = "Course tooling for 'Software Engineering Methodologies for Data Engineers'"
+requires-python = ">=3.11"
+dependencies = [
+    "duckdb>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.4",
+]
+
+[tool.setuptools]
+package-dir = { "" = "tools" }
+packages = ["datagen"]
+
+[tool.pytest.ini_options]
+testpaths = ["modules", "tools"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+# Two deliberate exclusions, both pedagogical:
+# - exercise starter files ship in an intentionally unfinished state
+# - the Module 00/02 monolith snapshots ARE the "before" picture — their
+#   lint violations are course material (Module 02 has students fix them)
+exclude = [
+    "modules/*/exercises/*",
+    "modules/00-orientation/project/pipeline.py",
+    "modules/02-code-design/project/pipeline.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]

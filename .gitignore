@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Generated data — never version data, only the code that produces it (Module 1)
+data/
+*.duckdb
+*.duckdb.wal
+
+# Module 01 git-kata sandbox (a standalone practice repo, rebuilt on demand)
+modules/01-version-control/exercises/kata/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
